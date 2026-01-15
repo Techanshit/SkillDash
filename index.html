@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillDash - Gemini Powered Mentoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a class="logo" onclick="showPage('home')">⚡ SkillDash</a>
+        <div class="hamburger" onclick="toggleNav()" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a onclick="showPage('home')">Home</a>
+            <a onclick="showPage('categories')">Skills</a>
+            <a onclick="scrollToRadar()">Connect Now</a>
+            <a onclick="showPage('login')" class="btn-primary" id="authBtn">Sign In</a>
+            <div class="user-menu" id="userMenu">
+                <span id="userName" style="font-weight: 700;"></span>
+                <div class="user-avatar" onclick="toggleUserDropdown()" id="userAvatar"></div>
+                <a onclick="logout()" style="display: none;" id="logoutBtn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page active">
+        <section class="hero">
+            <h1>Master Any Skill In Minutes ⚡</h1>
+            <p>Connect with India's top experts for instant 1:1 mentorship.</p>
+            <div class="search-bar">
+                <input type="text" id="mainSearch" placeholder="Search for React, Yoga, Finance...">
+                <button onclick="handleSearch()">Find Mentor</button>
+            </div>
+        </section>
+
+        <section class="section" id="connect-now">
+            <div class="connect-now-box">
+                <div style="margin-bottom: 1rem; position: relative; z-index: 1;">
+                    <span class="live-pulse"></span>
+                    <span style="font-weight: 800; color: #4CAF50; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Live Radar</span>
+                </div>
+                <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; position: relative; z-index: 1;">Instant Expert Access</h2>
+                <p style="color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; position: relative; z-index: 1;">These top-rated Indian mentors are online right now and ready for an instant call.</p>
+                
+                <div class="radar-grid" id="onlineMentors"></div>
+
+                <div style="margin-top: 3.5rem; position: relative; z-index: 1;">
+                    <button class="btn-primary" onclick="openModal('Matching...', 'Scanning for the highest rated mentor for your primary skill interest.', '🔍')">Fast Match with Any Expert</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Popular Skills</h2>
+                <button class="btn-primary" onclick="showPage('categories')">View All</button>
+            </div>
+            <div class="grid cat-grid" id="homeCats"></div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="margin-bottom: 3rem;">Featured Mentors</h2>
+            <div class="grid mentor-grid" id="homeMentors"></div>
+        </section>
+    </div>
+
+    <!-- CATEGORIES PAGE -->
+    <div id="page-categories" class="page">
+        <section class="section">
+            <button class="back-nav" onclick="showPage('home')">← Back to Home</button>
+            <h2 class="section-title" style="margin-bottom: 3rem;">Browse All Skills</h2>
+            <div class="grid cat-grid" id="allCatsGrid"></div>
+        </section>
+    </div>
+
+    <!-- SEARCH RESULTS -->
+    <div id="page-results" class="page">
+        <section class="section">
+            <button class="back-nav" onclick="showPage('home')">← Back to Search</button>
+            <h2 class="section-title">Results for "<span id="queryDisplay" style="color: var(--primary);"></span>"</h2>
+            <div class="grid mentor-grid" id="resultsGrid" style="margin-top: 3rem;"></div>
+        </section>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <div id="page-login" class="page">
+        <section class="section">
+            <button class="back-nav" onclick="showPage('home')">← Back</button>
+            <div class="auth-container">
+                <h2 style="margin-bottom: 1rem; font-weight: 900; font-size: 2rem;">Welcome Back 👋</h2>
+                <p style="color: #777; margin-bottom: 2rem; font-weight: 500;">Login to start your instant session.</p>
+                
+                <div class="error-msg" id="loginError"></div>
+                <div class="success-msg" id="loginSuccess"></div>
+                
+                <form onsubmit="handleLogin(event)" id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" class="form-input" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" class="form-input" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; font-size: 1.1rem;">Sign In</button>
+                </form>
+                
+                <div class="form-toggle">
+                    Don't have an account? <a onclick="showPage('signup')">Sign Up</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- SIGNUP PAGE -->
+    <div id="page-signup" class="page">
+        <section class="section">
+            <button class="back-nav" onclick="showPage('home')">← Back</button>
+            <div class="auth-container">
+                <h2 style="margin-bottom: 1rem; font-weight: 900; font-size: 2rem;">Join SkillDash 🚀</h2>
+                <p style="color: #777; margin-bottom: 2rem; font-weight: 500;">Create your account and start learning today.</p>
+                
+                <div class="error-msg" id="signupError"></div>
+                <div class="success-msg" id="signupSuccess"></div>
+                
+                <form onsubmit="handleSignup(event)" id="signupForm">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" class="form-input" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" class="form-input" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" class="form-input" required placeholder="Minimum 6 characters">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; font-size: 1.1rem;">Create Account</button>
+                </form>
+                
+                <div class="form-toggle">
+                    Already have an account? <a onclick="showPage('login')">Sign In</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- CHATBOT -->
+    <div class="chatbot-container">
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <span>💬 SkillDash Assistant</span>
+                <button onclick="toggleChat()" style="background:none; border:none; color:white; cursor:pointer; font-size: 1.5rem;">×</button>
+            </div>
+            <div class="chat-messages" id="chatBox">
+                <div class="msg msg-bot">Namaste! 🙏 I'm your SkillDash guide. Looking for an expert in Coding, Yoga, or perhaps Finance?</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="How can I help you learn?" onkeypress="if(event.key==='Enter') sendChat()">
+                <button onclick="sendChat()" style="background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: 800;">Send</button>
+            </div>
+        </div>
+        <button class="chat-toggle" onclick="toggleChat()">💬</button>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div id="modalIcon" style="font-size: 5rem; margin-bottom: 1.5rem;">🎉</div>
+            <h2 id="modalTitle" style="font-weight: 900; font-size: 1.8rem; color: var(--dark);">Success!</h2>
+            <p id="modalBody" style="color: #666; margin: 1.5rem 0 2.5rem; font-size: 1.1rem; font-weight: 500;"></p>
+            <button class="btn-primary" style="width: 100%;" onclick="closeModal()">Got it!</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
